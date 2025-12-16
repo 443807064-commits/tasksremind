@@ -4,13 +4,23 @@ import { ColorPalette } from "@/components/ColorPalette";
 import { YearGrid } from "@/components/YearGrid";
 import { TaskStats } from "@/components/TaskStats";
 import { useTaskStorage } from "@/hooks/useTaskStorage";
+import { Loader2 } from "lucide-react";
 
 export default function TaskPage() {
   const { taskId } = useParams<{ taskId: string }>();
-  const { getTask, updateTask } = useTaskStorage();
+  const { getTask, updateTask, isLoaded } = useTaskStorage();
   const [selectedColor, setSelectedColor] = useState<string | null>("palette-green");
 
   const task = getTask(taskId || "");
+
+  // Show loading while data is being loaded
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   if (!task) {
     return <Navigate to="/" replace />;
