@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { ColorPalette } from "@/components/ColorPalette";
+import { SimpleColorPalette } from "@/components/SimpleColorPalette";
 import { YearGrid } from "@/components/YearGrid";
 import { TaskStats } from "@/components/TaskStats";
 import { useTaskStorage } from "@/hooks/useTaskStorage";
@@ -13,7 +13,6 @@ export default function TaskPage() {
 
   const task = getTask(taskId || "");
 
-  // Show loading while data is being loaded
   if (!isLoaded) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -52,7 +51,7 @@ export default function TaskPage() {
 
         <div className="flex gap-6">
           <div className="shrink-0">
-            <ColorPalette
+            <SimpleColorPalette
               selectedColor={selectedColor}
               onSelectColor={setSelectedColor}
             />
