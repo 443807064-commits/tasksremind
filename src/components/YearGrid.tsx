@@ -1,18 +1,22 @@
-import { MONTHS_AR, DAYS_IN_MONTH, PALETTE_COLORS } from "@/types/task";
+import { MONTHS_AR, DAYS_IN_MONTH, CustomColor } from "@/types/task";
 
 interface YearGridProps {
   data: Record<string, string>;
+  colors: CustomColor[];
   selectedColor: string | null;
   onCellClick: (key: string) => void;
 }
 
-export function YearGrid({ data, selectedColor, onCellClick }: YearGridProps) {
+export function YearGrid({ data, colors, selectedColor, onCellClick }: YearGridProps) {
   const maxDays = Math.max(...DAYS_IN_MONTH);
 
-  const getCellColor = (colorValue: string | undefined) => {
-    if (!colorValue) return undefined;
-    const color = PALETTE_COLORS.find((c) => c.value === colorValue);
-    return color?.cssVar;
+  const getCellColor = (colorId: string | undefined) => {
+    if (!colorId) return undefined;
+    const color = colors.find((c) => c.id === colorId);
+    if (color) {
+      return `hsl(${color.hue}, 70%, 50%)`;
+    }
+    return undefined;
   };
 
   return (
@@ -45,7 +49,7 @@ export function YearGrid({ data, selectedColor, onCellClick }: YearGridProps) {
                 const day = dayIndex + 1;
                 const isValidDay = day <= DAYS_IN_MONTH[monthIndex];
                 const cellKey = `${monthIndex}-${day}`;
-                const cellColor = data[cellKey];
+                const cellColorId = data[cellKey];
 
                 if (!isValidDay) {
                   return (
@@ -62,10 +66,10 @@ export function YearGrid({ data, selectedColor, onCellClick }: YearGridProps) {
                     onClick={() => onCellClick(cellKey)}
                     className={`
                       aspect-square rounded-sm cell-transition cell-hover-effect
-                      ${!cellColor ? "bg-cell-empty" : ""}
-                      ${selectedColor ? "cursor-pointer" : "cursor-default"}
+                      ${!cellColorId ? "bg-cell-empty" : ""}
+                      ${selectedColor !== undefined ? "cursor-pointer" : "cursor-default"}
                     `}
-                    style={cellColor ? { backgroundColor: getCellColor(cellColor) } : undefined}
+                    style={cellColorId ? { backgroundColor: getCellColor(cellColorId) } : undefined}
                     title={`${MONTHS_AR[monthIndex]} ${day}`}
                   />
                 );

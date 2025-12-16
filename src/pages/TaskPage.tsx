@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { SimpleColorPalette } from "@/components/SimpleColorPalette";
+import { TaskColorPalette } from "@/components/TaskColorPalette";
 import { YearGrid } from "@/components/YearGrid";
 import { TaskStats } from "@/components/TaskStats";
 import { useTaskStorage } from "@/hooks/useTaskStorage";
 import { Loader2 } from "lucide-react";
+import { DEFAULT_COLORS } from "@/types/task";
 
 export default function TaskPage() {
   const { taskId } = useParams<{ taskId: string }>();
-  const { getTask, updateTask, isLoaded } = useTaskStorage();
-  const [selectedColor, setSelectedColor] = useState<string | null>("palette-green");
+  const { getTask, updateTask, addColorToTask, removeColorFromTask, isLoaded } = useTaskStorage();
+  const [selectedColor, setSelectedColor] = useState<string | null>("complete");
 
   const task = getTask(taskId || "");
 
@@ -25,6 +26,8 @@ export default function TaskPage() {
     return <Navigate to="/" replace />;
   }
 
+  const colors = task.customColors || DEFAULT_COLORS;
+
   const handleCellClick = (cellKey: string) => {
     const newData = { ...task.data };
     
@@ -34,6 +37,22 @@ export default function TaskPage() {
       newData[cellKey] = selectedColor;
     }
     
+    updateTask(task.id, newData);
+  };
+
+  const handleAddColor = (name: string, hue: number) => {
+    addColorToTask(task.id, name, hue);
+  };
+
+  const handleRemoveColor = (colorId: string) => {
+    removeColorFromTask(task.id, colorId);
+    // Also remove this color from the grid data
+    const newData = { ...task.data };
+    Object.keys(newData).forEach((key) => {
+      if (newData[key] === colorId) {
+        delete newData[key];
+      }
+    });
     updateTask(task.id, newData);
   };
 
@@ -51,15 +70,19 @@ export default function TaskPage() {
 
         <div className="flex gap-6">
           <div className="shrink-0">
-            <SimpleColorPalette
+            <TaskColorPalette
+              colors={colors}
               selectedColor={selectedColor}
               onSelectColor={setSelectedColor}
+              onAddColor={handleAddColor}
+              onRemoveColor={handleRemoveColor}
             />
           </div>
 
           <div className="flex-1 bg-card rounded-lg border border-border p-6 overflow-hidden">
             <YearGrid
               data={task.data}
+              colors={colors}
               selectedColor={selectedColor}
               onCellClick={handleCellClick}
             />

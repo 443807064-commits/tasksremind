@@ -2,6 +2,13 @@ export interface Task {
   id: string;
   name: string;
   data: Record<string, string>; // key: "month-day", value: color
+  customColors?: CustomColor[]; // optional custom colors per task
+}
+
+export interface CustomColor {
+  id: string;
+  name: string;
+  hue: number; // HSL hue value (0-360)
 }
 
 export interface ColorOption {
@@ -27,3 +34,8 @@ export const MONTHS_AR = [
 ];
 
 export const DAYS_IN_MONTH = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+export const DEFAULT_COLORS = [
+  { id: "complete", name: "أنجزت", hue: 142 },
+  { id: "incomplete", name: "لم أنجز", hue: 0 },
+];
