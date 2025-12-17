@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Task } from "@/types/task";
-import { CheckCircle2, Home } from "lucide-react";
+import { Home } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface TaskNavProps {
   tasks: Task[];
@@ -8,13 +9,14 @@ interface TaskNavProps {
 
 export function TaskNav({ tasks }: TaskNavProps) {
   const location = useLocation();
+  const { language } = useLanguage();
 
   return (
-    <nav className="flex items-center gap-4 p-4 bg-card border-b border-border">
+    <nav className="flex items-center gap-4 p-4 bg-card border-b border-border overflow-x-auto">
       <Link
         to="/"
         className={`
-          flex items-center gap-2 px-4 py-2 rounded-lg cell-transition
+          flex items-center gap-2 px-4 py-2 rounded-lg cell-transition shrink-0
           ${location.pathname === "/" 
             ? "bg-primary text-primary-foreground" 
             : "hover:bg-secondary text-foreground"
@@ -22,24 +24,24 @@ export function TaskNav({ tasks }: TaskNavProps) {
         `}
       >
         <Home className="w-4 h-4" />
-        <span>الرئيسية</span>
+        <span>{language === "ar" ? "الرئيسية" : "Home"}</span>
       </Link>
 
-      <div className="h-6 w-px bg-border" />
+      <div className="h-6 w-px bg-border shrink-0" />
 
       {tasks.map((task) => (
         <Link
           key={task.id}
           to={`/task/${task.id}`}
           className={`
-            flex items-center gap-2 px-4 py-2 rounded-lg cell-transition
+            flex items-center gap-2 px-4 py-2 rounded-lg cell-transition shrink-0
             ${location.pathname === `/task/${task.id}` 
               ? "bg-primary text-primary-foreground" 
               : "hover:bg-secondary text-foreground"
             }
           `}
         >
-          <CheckCircle2 className="w-4 h-4" />
+          <span className="text-lg">{task.icon || "📋"}</span>
           <span>{task.name}</span>
         </Link>
       ))}
