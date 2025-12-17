@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTaskStorage } from "@/hooks/useTaskStorage";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { CheckCircle2, ArrowLeft, ArrowRight, Sparkles, Plus, Trash2 } from "lucide-react";
+import { Sparkles, Plus, Trash2 } from "lucide-react";
 import { DAYS_IN_MONTH } from "@/types/task";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,15 +32,17 @@ const Index = () => {
   const { t, language } = useLanguage();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newTaskName, setNewTaskName] = useState("");
+  const [newTaskIcon, setNewTaskIcon] = useState("📋");
   const navigate = useNavigate();
   const totalDays = DAYS_IN_MONTH.reduce((a, b) => a + b, 0);
 
-  const Arrow = language === "ar" ? ArrowLeft : ArrowRight;
+  const EMOJI_OPTIONS = ["📋", "💪", "📚", "🏃", "🎯", "✨", "🎨", "💼", "🎵", "🍎", "💧", "🧘"];
 
   const handleAddTask = () => {
     if (newTaskName.trim()) {
-      const newTaskId = addTask(newTaskName.trim());
+      const newTaskId = addTask(newTaskName.trim(), newTaskIcon);
       setNewTaskName("");
+      setNewTaskIcon("📋");
       setIsDialogOpen(false);
       navigate(`/task/${newTaskId}`);
     }
@@ -107,21 +109,18 @@ const Index = () => {
                 </AlertDialog>
 
                 <Link to={`/task/${task.id}`} className="block">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-3 bg-primary/20 rounded-lg group-hover:bg-primary/30 cell-transition">
-                        <CheckCircle2 className="w-6 h-6 text-primary" />
-                      </div>
-                      <div>
-                        <h2 className="text-xl font-semibold text-foreground">
-                          {task.name}
-                        </h2>
-                        <p className="text-sm text-muted-foreground">
-                          {filledDays} {t.daysRecorded}
-                        </p>
-                      </div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 bg-primary/20 rounded-lg group-hover:bg-primary/30 cell-transition flex items-center justify-center text-2xl">
+                      {task.icon || "📋"}
                     </div>
-                    <Arrow className={`w-5 h-5 text-muted-foreground group-hover:text-primary cell-transition ${language === "ar" ? "group-hover:-translate-x-1" : "group-hover:translate-x-1"}`} />
+                    <div>
+                      <h2 className="text-xl font-semibold text-foreground">
+                        {task.name}
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        {filledDays} {t.daysRecorded}
+                      </p>
+                    </div>
                   </div>
 
                   {/* Progress Bar */}
@@ -170,6 +169,29 @@ const Index = () => {
                       }
                     }}
                   />
+                </div>
+                <div>
+                  <label className="text-sm text-muted-foreground mb-2 block">
+                    {language === "ar" ? "أيقونة المهمة" : "Task Icon"}
+                  </label>
+                  <div className="grid grid-cols-6 gap-2">
+                    {EMOJI_OPTIONS.map((emoji) => (
+                      <button
+                        key={emoji}
+                        type="button"
+                        onClick={() => setNewTaskIcon(emoji)}
+                        className={`
+                          w-10 h-10 rounded-lg text-xl flex items-center justify-center cell-transition
+                          ${newTaskIcon === emoji 
+                            ? "bg-primary text-primary-foreground ring-2 ring-ring" 
+                            : "bg-secondary hover:bg-secondary/80"
+                          }
+                        `}
+                      >
+                        {emoji}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 <Button 
                   onClick={handleAddTask} 

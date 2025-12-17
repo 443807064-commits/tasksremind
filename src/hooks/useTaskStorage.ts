@@ -4,8 +4,8 @@ import { Task, DEFAULT_COLORS } from "@/types/task";
 const STORAGE_KEY = "task-tracker-data";
 
 const DEFAULT_TASKS: Task[] = [
-  { id: "exercise", name: "التمارين", data: {}, customColors: DEFAULT_COLORS },
-  { id: "study", name: "الدراسة لمدة ٣٠ دقيقة", data: {}, customColors: DEFAULT_COLORS },
+  { id: "exercise", name: "التمارين", data: {}, customColors: DEFAULT_COLORS, icon: "💪" },
+  { id: "study", name: "الدراسة لمدة ٣٠ دقيقة", data: {}, customColors: DEFAULT_COLORS, icon: "📚" },
 ];
 
 export function useTaskStorage() {
@@ -42,16 +42,28 @@ export function useTaskStorage() {
     });
   };
 
-  const addTask = (name: string) => {
+  const addTask = (name: string, icon?: string) => {
     const id = `task-${Date.now()}`;
     const newTask: Task = {
       id,
       name,
       data: {},
       customColors: DEFAULT_COLORS,
+      icon: icon || "📋",
     };
     setTasks((prev) => [...prev, newTask]);
     return id;
+  };
+
+  const updateTaskIcon = (taskId: string, icon: string) => {
+    setTasks((prev) => {
+      return prev.map((task) => {
+        if (task.id === taskId) {
+          return { ...task, icon };
+        }
+        return task;
+      });
+    });
   };
 
   const deleteTask = (taskId: string) => {
@@ -104,5 +116,6 @@ export function useTaskStorage() {
     deleteTask,
     addColorToTask,
     removeColorFromTask,
+    updateTaskIcon,
   };
 }
