@@ -83,7 +83,7 @@ const Index = () => {
               >
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <button className={`absolute top-4 ${language === "ar" ? "left-4" : "right-4"} p-2 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 cell-transition`}>
+                    <button className={`absolute top-4 ${language === "ar" ? "left-4" : "right-4"} p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg cell-transition`}>
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </AlertDialogTrigger>
