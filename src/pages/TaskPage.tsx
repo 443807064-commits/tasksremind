@@ -3,7 +3,7 @@ import { useParams, Navigate } from "react-router-dom";
 import { TaskColorPalette } from "@/components/TaskColorPalette";
 import { YearGrid } from "@/components/YearGrid";
 import { TaskStats } from "@/components/TaskStats";
-import { useTaskStorage } from "@/hooks/useTaskStorage";
+import { useTaskStore } from "@/contexts/TaskStorageContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Loader2 } from "lucide-react";
@@ -11,7 +11,7 @@ import { DEFAULT_COLORS } from "@/types/task";
 
 export default function TaskPage() {
   const { taskId } = useParams<{ taskId: string }>();
-  const { getTask, updateTask, addColorToTask, removeColorFromTask, isLoaded } = useTaskStorage();
+  const { getTask, updateTask, addColorToTask, removeColorFromTask, isLoaded } = useTaskStore();
   const { t } = useLanguage();
   const [selectedColor, setSelectedColor] = useState<string | null>("complete");
 

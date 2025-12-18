@@ -4,8 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { TaskNav } from "@/components/TaskNav";
-import { useTaskStorage } from "@/hooks/useTaskStorage";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { TaskStorageProvider, useTaskStore } from "@/contexts/TaskStorageContext";
 import Index from "./pages/Index";
 import TaskPage from "./pages/TaskPage";
 import NotFound from "./pages/NotFound";
@@ -13,7 +13,7 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 function AppContent() {
-  const { tasks } = useTaskStorage();
+  const { tasks } = useTaskStore();
 
   return (
     <>
@@ -30,13 +30,15 @@ function AppContent() {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AppContent />
-        </BrowserRouter>
-      </TooltipProvider>
+      <TaskStorageProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AppContent />
+          </BrowserRouter>
+        </TooltipProvider>
+      </TaskStorageProvider>
     </LanguageProvider>
   </QueryClientProvider>
 );

@@ -4,7 +4,9 @@ export interface Task {
   data: Record<string, string>; // key: "month-day", value: color
   customColors?: CustomColor[]; // optional custom colors per task
   icon?: string; // optional emoji or small icon
+  image?: string; // optional small image (data URL) shown next to the task name
 }
+
 
 export interface CustomColor {
   id: string;

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useTaskStorage } from "@/hooks/useTaskStorage";
+import { useTaskStore } from "@/contexts/TaskStorageContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Sparkles, Plus, Trash2 } from "lucide-react";
+import { Sparkles, Plus, Trash2, Image as ImageIcon } from "lucide-react";
 import { DAYS_IN_MONTH } from "@/types/task";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const Index = () => {
-  const { tasks, addTask, deleteTask } = useTaskStorage();
+  const { tasks, addTask, deleteTask, updateTaskImage } = useTaskStore();
   const { t, language } = useLanguage();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newTaskName, setNewTaskName] = useState("");
@@ -83,40 +83,71 @@ const Index = () => {
                 className="group bg-card rounded-xl border border-border p-6 cell-transition hover:border-primary/50 hover:glow-effect animate-fade-in relative"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <button className={`absolute top-4 ${language === "ar" ? "left-4" : "right-4"} p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg cell-transition`}>
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent className="bg-card">
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>{t.deleteTask}</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        {t.deleteTaskConfirm}
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter className="gap-2">
-                      <AlertDialogCancel>{t.cancel}</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={() => deleteTask(task.id)}
-                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                      >
-                        {t.delete}
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                <div className={`absolute top-4 ${language === "ar" ? "left-4" : "right-4"} flex items-center gap-1`}>
+                  <label
+                    className="p-2 text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg cell-transition cursor-pointer"
+                    title={language === "ar" ? "إضافة صورة" : "Add image"}
+                  >
+                    <ImageIcon className="w-4 h-4" />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          const result = typeof reader.result === "string" ? reader.result : undefined;
+                          updateTaskImage(task.id, result);
+                        };
+                        reader.readAsDataURL(file);
+                        e.currentTarget.value = "";
+                      }}
+                    />
+                  </label>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <button className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg cell-transition">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="bg-card">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>{t.deleteTask}</AlertDialogTitle>
+                        <AlertDialogDescription>{t.deleteTaskConfirm}</AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter className="gap-2">
+                        <AlertDialogCancel>{t.cancel}</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => deleteTask(task.id)}
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                          {t.delete}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
 
                 <Link to={`/task/${task.id}`} className="block">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-primary/20 rounded-lg group-hover:bg-primary/30 cell-transition flex items-center justify-center text-2xl">
+                    <div className="w-12 h-12 bg-primary/20 rounded-lg group-hover:bg-primary/30 cell-transition flex items-center justify-center text-2xl overflow-hidden">
                       {task.icon || "📋"}
                     </div>
-                    <div>
-                      <h2 className="text-xl font-semibold text-foreground">
-                        {task.name}
-                      </h2>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-xl font-semibold text-foreground truncate">{task.name}</h2>
+                        {task.image ? (
+                          <img
+                            src={task.image}
+                            alt={language === "ar" ? `صورة مهمة ${task.name}` : `Task image for ${task.name}`}
+                            loading="lazy"
+                            className="h-6 w-6 rounded-md border border-border object-cover"
+                          />
+                        ) : null}
+                      </div>
                       <p className="text-sm text-muted-foreground">
                         {filledDays} {t.daysRecorded}
                       </p>

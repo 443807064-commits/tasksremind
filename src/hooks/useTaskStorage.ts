@@ -35,9 +35,7 @@ export function useTaskStorage() {
 
   const updateTask = (taskId: string, data: Record<string, string>) => {
     setTasks((prev) => {
-      const updated = prev.map((task) =>
-        task.id === taskId ? { ...task, data } : task
-      );
+      const updated = prev.map((task) => (task.id === taskId ? { ...task, data } : task));
       return updated;
     });
   };
@@ -60,6 +58,17 @@ export function useTaskStorage() {
       return prev.map((task) => {
         if (task.id === taskId) {
           return { ...task, icon };
+        }
+        return task;
+      });
+    });
+  };
+
+  const updateTaskImage = (taskId: string, image: string | undefined) => {
+    setTasks((prev) => {
+      return prev.map((task) => {
+        if (task.id === taskId) {
+          return { ...task, image };
         }
         return task;
       });
@@ -107,15 +116,16 @@ export function useTaskStorage() {
     return tasks.find((task) => task.id === taskId);
   };
 
-  return { 
-    tasks, 
-    updateTask, 
-    getTask, 
-    isLoaded, 
-    addTask, 
+  return {
+    tasks,
+    updateTask,
+    getTask,
+    isLoaded,
+    addTask,
     deleteTask,
     addColorToTask,
     removeColorFromTask,
     updateTaskIcon,
+    updateTaskImage,
   };
 }

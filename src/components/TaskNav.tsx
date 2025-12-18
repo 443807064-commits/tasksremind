@@ -41,7 +41,16 @@ export function TaskNav({ tasks }: TaskNavProps) {
             }
           `}
         >
-          <span className="text-lg">{task.icon || "📋"}</span>
+          {task.image ? (
+            <img
+              src={task.image}
+              alt={language === "ar" ? `صورة مهمة ${task.name}` : `Task image for ${task.name}`}
+              loading="lazy"
+              className="h-6 w-6 rounded-md border border-border object-cover"
+            />
+          ) : (
+            <span className="text-lg">{task.icon || "📋"}</span>
+          )}
           <span>{task.name}</span>
         </Link>
       ))}
