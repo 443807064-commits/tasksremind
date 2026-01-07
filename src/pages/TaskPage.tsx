@@ -76,8 +76,8 @@ export default function TaskPage() {
           <TaskStats data={task.data} colors={colors} />
         </div>
 
-        <div className="flex gap-2 flex-1 overflow-hidden min-h-0">
-          <div className="shrink-0">
+        <div className="flex flex-col md:flex-row gap-2 flex-1 overflow-hidden min-h-0">
+          <div className="shrink-0 md:w-auto order-2 md:order-1">
             <TaskColorPalette
               colors={colors}
               selectedColor={selectedColor}
@@ -87,7 +87,7 @@ export default function TaskPage() {
             />
           </div>
 
-          <div className="flex-1 bg-card rounded-lg border border-border p-2 overflow-hidden flex flex-col min-h-0">
+          <div className="flex-1 bg-card rounded border border-border p-2 overflow-hidden flex flex-col min-h-[50vh] md:min-h-0 order-1 md:order-2">
             <YearGrid
               data={task.data}
               colors={colors}
