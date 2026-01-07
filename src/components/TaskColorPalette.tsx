@@ -57,40 +57,40 @@ export function TaskColorPalette({
   };
 
   return (
-    <div className="flex flex-col gap-3 p-4 bg-card rounded-lg border border-border">
-      <h3 className="text-sm font-medium text-muted-foreground mb-2">{t.selectColor}</h3>
+    <div className="flex flex-col gap-1 p-2 bg-card rounded border border-border">
+      <h3 className="text-[10px] font-medium text-muted-foreground">{t.selectColor}</h3>
       
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         {colors.map((color) => (
-          <div key={color.id} className="flex items-center gap-2">
+          <div key={color.id} className="flex items-center gap-1">
             <button
               onClick={() => onSelectColor(color.id)}
               className={`
-                flex-1 flex items-center gap-3 p-3 rounded-lg cell-transition
+                flex-1 flex items-center gap-1.5 px-1.5 py-1 rounded cell-transition
                 ${selectedColor === color.id 
-                  ? "ring-2 ring-ring ring-offset-2 ring-offset-background" 
+                  ? "ring-1 ring-ring ring-offset-1 ring-offset-background" 
                   : "hover:bg-secondary"
                 }
               `}
             >
               <div 
-                className="w-8 h-8 rounded-md flex items-center justify-center"
+                className="w-4 h-4 rounded flex items-center justify-center shrink-0"
                 style={{ backgroundColor: getColorStyle(color.hue) }}
               >
                 {color.id === "complete" ? (
-                  <Check className="w-5 h-5 text-primary-foreground" />
+                  <Check className="w-2.5 h-2.5 text-primary-foreground" />
                 ) : color.id === "incomplete" ? (
-                  <X className="w-5 h-5 text-primary-foreground" />
+                  <X className="w-2.5 h-2.5 text-primary-foreground" />
                 ) : null}
               </div>
-              <span className="text-sm font-medium">{color.name}</span>
+              <span className="text-[10px] font-medium truncate">{color.name}</span>
             </button>
             {color.id !== "complete" && color.id !== "incomplete" && (
               <button
                 onClick={() => onRemoveColor(color.id)}
-                className="p-2 text-muted-foreground hover:text-destructive cell-transition"
+                className="p-0.5 text-muted-foreground hover:text-destructive cell-transition"
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="w-3 h-3" />
               </button>
             )}
           </div>
@@ -99,26 +99,26 @@ export function TaskColorPalette({
         <button
           onClick={() => onSelectColor(null)}
           className={`
-            flex items-center gap-3 p-3 rounded-lg cell-transition
+            flex items-center gap-1.5 px-1.5 py-1 rounded cell-transition
             ${selectedColor === null 
-              ? "ring-2 ring-ring ring-offset-2 ring-offset-background" 
+              ? "ring-1 ring-ring ring-offset-1 ring-offset-background" 
               : "hover:bg-secondary"
             }
           `}
         >
-          <div className="w-8 h-8 rounded-md bg-cell-empty flex items-center justify-center">
-            <Eraser className="w-5 h-5 text-muted-foreground" />
+          <div className="w-4 h-4 rounded bg-cell-empty flex items-center justify-center">
+            <Eraser className="w-2.5 h-2.5 text-muted-foreground" />
           </div>
-          <span className="text-sm font-medium">{t.eraser}</span>
+          <span className="text-[10px] font-medium">{t.eraser}</span>
         </button>
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <button className="flex items-center gap-3 p-3 rounded-lg cell-transition hover:bg-secondary border-2 border-dashed border-border">
-              <div className="w-8 h-8 rounded-md bg-secondary flex items-center justify-center">
-                <Plus className="w-5 h-5 text-muted-foreground" />
+            <button className="flex items-center gap-1.5 px-1.5 py-1 rounded cell-transition hover:bg-secondary border border-dashed border-border">
+              <div className="w-4 h-4 rounded bg-secondary flex items-center justify-center">
+                <Plus className="w-2.5 h-2.5 text-muted-foreground" />
               </div>
-              <span className="text-sm font-medium text-muted-foreground">{t.addColor}</span>
+              <span className="text-[10px] font-medium text-muted-foreground">{t.addColor}</span>
             </button>
           </DialogTrigger>
           <DialogContent className="bg-card">
