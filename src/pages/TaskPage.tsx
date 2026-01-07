@@ -60,21 +60,23 @@ export default function TaskPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto py-8">
-        <div className="flex justify-between items-start mb-8">
+    <div className="h-screen bg-background flex flex-col overflow-hidden">
+      <div className="container mx-auto px-4 py-2 flex flex-col h-full overflow-hidden">
+        <div className="flex justify-between items-center mb-2 shrink-0">
           <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">{task.name}</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-lg font-bold text-foreground">{task.name}</h1>
+            <p className="text-xs text-muted-foreground">
               {t.trackYourProgress}
             </p>
           </div>
           <LanguageSwitcher />
         </div>
 
-        <TaskStats data={task.data} colors={colors} />
+        <div className="shrink-0">
+          <TaskStats data={task.data} colors={colors} />
+        </div>
 
-        <div className="flex gap-6">
+        <div className="flex gap-2 flex-1 overflow-hidden min-h-0">
           <div className="shrink-0">
             <TaskColorPalette
               colors={colors}
@@ -85,7 +87,7 @@ export default function TaskPage() {
             />
           </div>
 
-          <div className="flex-1 bg-card rounded-lg border border-border p-6 overflow-hidden">
+          <div className="flex-1 bg-card rounded-lg border border-border p-2 overflow-hidden flex flex-col min-h-0">
             <YearGrid
               data={task.data}
               colors={colors}
