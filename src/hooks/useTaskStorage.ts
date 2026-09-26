@@ -90,7 +90,7 @@ export function useTaskStorage() {
     setTasks((prev) => prev.filter((task) => task.id !== taskId));
   };
 
-  const addColorToTask = (taskId: string, colorName: string, hue: number) => {
+  const addColorToTask = (taskId: string, colorName: string, hue: number, hex?: string) => {
     setTasks((prev) => {
       return prev.map((task) => {
         if (task.id === taskId) {
@@ -98,6 +98,7 @@ export function useTaskStorage() {
             id: `color-${Date.now()}`,
             name: colorName,
             hue,
+             hex,
           };
           return {
             ...task,

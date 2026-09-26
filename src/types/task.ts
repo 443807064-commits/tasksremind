@@ -12,6 +12,7 @@ export interface CustomColor {
   id: string;
   name: string;
   hue: number; // HSL hue value (0-360)
+  hex?: string; // optional exact color selected by the user
 }
 
 export interface ColorOption {
