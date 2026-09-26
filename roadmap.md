@@ -1,0 +1,3 @@
+- [x] Convert task tracker to daily journal and remove statistics.
+- [x] Add day index, notes, reflection questions, and custom colors.
+- [ ] Verify daily writing, task marking, color creation, and mobile layout in preview.
