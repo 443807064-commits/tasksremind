@@ -1,0 +1,2 @@
+- Keep the daily journal in a shared DailyJournal view for home and task-specific pages so date, notes, questions, and task interactions stay consistent.
+- Keep daily notes, answers, and custom questions in browser storage keyed by date while task status and colors remain in the shared task store; this preserves existing tracked days without a backend.
